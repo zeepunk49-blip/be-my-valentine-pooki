@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine?</title>
+    <title>A Special Question</title>
     <style>
         body {
             display: flex;
@@ -12,78 +12,92 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffeef2;
-            font-family: 'Arial', sans-serif;
+            /* CUSTOM BACKGROUND: Change the URL below to any image link or use a color */
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                        url('https://images.unsplash.com/photo-1518199266791-73994940132d?q=80&w=2070&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            font-family: 'Georgia', serif;
             text-align: center;
         }
 
         .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            max-width: 400px;
         }
 
-        h1 { color: #d63384; font-size: 2.5rem; }
+        h1 { color: #c9184a; font-size: 2.2rem; margin-bottom: 10px; }
+        p { color: #555; font-size: 1.1rem; }
 
         .buttons {
-            margin-top: 2rem;
-            position: relative;
+            margin-top: 2.5rem;
             display: flex;
             justify-content: center;
             gap: 20px;
+            min-height: 50px; /* Keeps layout stable when "No" vanishes */
         }
 
         button {
-            padding: 15px 30px;
+            padding: 12px 35px;
             font-size: 1.2rem;
             border: none;
-            border-radius: 50px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-        #yesBtn { background-color: #ff4d6d; color: white; }
-        
-        #noBtn {
-            background-color: #adb5bd;
+        #yesBtn {
+            background-color: #ff4d6d;
             color: white;
-            position: relative;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
         }
 
-        .heart { font-size: 5rem; color: #ff4d6d; }
+        #yesBtn:hover { transform: scale(1.1); background-color: #ff758f; }
+
+        #noBtn {
+            background-color: #6c757d;
+            color: white;
+            opacity: 1;
+        }
+
+        .heart-icon { font-size: 4rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="heart">❤️</div>
+    <div class="container" id="mainCard">
+        <div class="heart-icon">🌹</div>
         <h1>Will you be my Valentine?</h1>
-        <p>I promise it'll be a great day!</p>
+        <p>I promise it'll be a day full of surprises!</p>
         
         <div class="buttons">
             <button id="yesBtn" onclick="celebrate()">Yes!</button>
-            <button id="noBtn" onmouseover="moveButton()">No</button>
+            <button id="noBtn" onmouseover="vanishButton()">No</button>
         </div>
     </div>
 
     <script>
-        function moveButton() {
-            const btn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            
-            btn.style.position = 'absolute';
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
+        function vanishButton() {
+            const noBtn = document.getElementById('noBtn');
+            // This makes it invisible and unclickable instantly
+            noBtn.style.display = 'none'; 
         }
 
         function celebrate() {
-            document.querySelector('.container').innerHTML = `
-                <div class="heart">💖</div>
-                <h1>Yay! See you tomorrow!</h1>
-                <p>I'm the luckiest person ever.</p>
+            const card = document.getElementById('mainCard');
+            card.innerHTML = `
+                <div class="heart-icon">💖</div>
+                <h1>I knew you'd say yes!</h1>
+                <p>Can't wait to see you tomorrow. I love you!</p>
             `;
+            // Optional: add some confetti or a bigger heart
+            card.style.borderColor = "#ff4d6d";
+            card.style.borderWidth = "2px";
+            card.style.borderStyle = "solid";
         }
     </script>
 
