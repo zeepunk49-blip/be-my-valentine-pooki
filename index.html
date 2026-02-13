@@ -5,219 +5,360 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For My Pookie ❤️</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
             --primary: #ff4d6d;
-            --bg-color: #ffe5ec;
-            --glass: rgba(255, 255, 255, 0.8);
+            --secondary: #ffb3c1;
+            --bg: #fff0f3;
         }
 
         body {
             margin: 0;
-            height: 100vh;
+            overflow: hidden;
+            background: var(--bg);
+            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a18cd1);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Ensures no scrollbars appear during jumps */
+            height: 100vh;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* --- SCREEN MANAGEMENT --- */
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
         }
-
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            padding: 3rem;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            text-align: center;
-            max-width: 90%;
-            width: 450px; /* Slightly wider to fit text */
-            transition: all 0.3s ease;
-            position: relative;
+        
+        .active {
+            opacity: 1;
+            pointer-events: all;
             z-index: 10;
         }
 
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            color: #d62828;
-            font-size: 2.5rem;
-            margin: 0;
-            line-height: 1.2;
+        /* --- STAGE 1: THE ENVELOPE --- */
+        .envelope-wrapper {
+            cursor: pointer;
+            transition: transform 0.3s;
         }
+        .envelope-wrapper:hover { transform: scale(1.05); }
 
-        p {
-            color: #555;
-            font-size: 1.1rem;
-            margin-top: 1rem;
-            min-height: 2rem;
-        }
-
-        .btn-group {
-            margin-top: 2rem;
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: #ff4d6d;
+            position: relative;
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            height: 60px;
-            position: relative; /* Essential for button positioning */
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .envelope::before { /* Flap */
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff758f;
+            transform-origin: top;
+            transition: transform 0.5s;
         }
 
-        button {
-            padding: 12px 32px;
-            border: none;
-            border-radius: 50px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
+        .heart-seal {
+            font-size: 3rem;
+            color: white;
+            z-index: 5;
+            transition: transform 0.2s;
+        }
+
+        .tap-text {
+            margin-top: 20px;
+            color: #ff4d6d;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* --- STAGE 2: MEMORY LANE --- */
+        .gallery-container {
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .photo-frame {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            margin-bottom: 20px;
+        }
+
+        .photo-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #d62828;
+            margin-top: 10px;
+        }
+
+        .next-btn {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-            transition: transform 0.1s; /* Faster transition for snappy movement */
-            position: relative; /* Default position */
-            z-index: 20;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
         }
 
-        /* The Photo Styling */
-        .user-photo {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 6px solid #ff4d6d;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: none;
+        /* --- STAGE 3: THE CHASE (Updated Styles) --- */
+        .chase-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+        }
+        
+        .chase-btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            background: var(--primary);
+            margin: 10px;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        /* --- STAGE 4: THE TICKET --- */
+        .ticket {
+            background: white;
+            width: 320px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            position: relative;
         }
 
+        .ticket-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px dashed #fff;
+        }
+
+        .ticket-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .ticket-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .barcode {
+            margin-top: 20px;
+            height: 40px;
+            background: repeating-linear-gradient(
+                90deg,
+                #333 0,
+                #333 2px,
+                transparent 2px,
+                transparent 4px
+            );
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="glass-card" id="main-card">
-        <img id="final-photo" class="user-photo" src="" alt="My Photo">
-        
-        <div id="icon" style="font-size: 4rem; margin-bottom: 1rem;">💌</div>
-        
-        <h1 id="question">Dearest Pookie, <br>will you be my Valentine?</h1>
-        <p id="subtext">Don't say no! (Actually, you can't) 😉</p>
-        
-        <div class="btn-group" id="buttons">
-            <button id="btn1" onmouseover="interact(this)" onclick="interact(this)">YES</button>
-            <button id="btn2" onmouseover="interact(this)" onclick="interact(this)">YES</button>
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="screen1" class="screen active" onclick="startJourney()">
+        <div class="envelope-wrapper">
+            <div class="envelope">
+                <div class="heart-seal">💌</div>
+            </div>
+        </div>
+        <div class="tap-text">Tap to open</div>
+    </div>
+
+    <div id="screen2" class="screen">
+        <div class="gallery-container">
+            <div class="photo-frame">
+                <img id="slide-img" class="photo-img" src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1887" alt="Memory">
+            </div>
+            <div id="slide-caption" class="caption">Remember this day? ❤️</div>
+            <br>
+            <button class="next-btn" onclick="nextSlide()">Next ➡️</button>
+        </div>
+    </div>
+
+    <div id="screen3" class="screen">
+        <div class="chase-container">
+            <h1 style="color: #ff4d6d; font-family: 'Dancing Script'; font-size: 2.5rem;">One last question...</h1>
+            <p style="color: #555;">Will you be my Valentine?</p>
+            <p id="taunt" style="font-size: 0.8rem; color: #ff4d6d; height: 20px;"></p>
+            
+            <div style="margin-top: 20px; height: 60px;">
+                <button class="chase-btn" id="yesBtn" onclick="goToTicket()">YES</button>
+                <button class="chase-btn" id="noBtn" onmouseover="dodge(this)" onclick="dodge(this)">YES</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen4" class="screen">
+        <div class="ticket">
+            <div class="ticket-header">
+                <h2 style="margin: 0; font-family: 'Dancing Script';">It's a Date!</h2>
+                <p style="margin: 5px 0 0;">Valentine's Day 2026</p>
+            </div>
+            <div class="ticket-body">
+                <img src="https://images.unsplash.com/photo-1518199266791-73994940132d?q=80&w=2070" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #ff4d6d;">
+                
+                <h3 style="color: #333;">Admit One: My Pookie</h3>
+                <p style="color: #777; font-size: 0.9rem;">Get ready for a night full of surprises.</p>
+                
+                <div style="border-top: 1px solid #eee; margin: 15px 0;"></div>
+                
+                <div class="ticket-info">
+                    <div>
+                        <strong>Time</strong><br>
+                        7:00 PM
+                    </div>
+                    <div style="text-align: right;">
+                        <strong>Location</strong><br>
+                        Secret Spot 🤫
+                    </div>
+                </div>
+                
+                <div class="barcode"></div>
+                <p style="font-size: 0.7rem; color: #aaa; margin-top: 5px;">NO REFUNDS ON LOVE</p>
+            </div>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // CONFIGURATION: PASTE YOUR PHOTO LINK HERE
-        // ==========================================
-        const yourPhotoURL = "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1887&auto=format&fit=crop"; 
+        // --- CONFIGURATION ---
         
-        const messages = [
-            "Nice try! 💨",
-            "Too slow! 😂",
-            "Try the other one! 👉",
-            "Oops, missed! 🧈",
-            "You really want this huh? 😏",
-            "Almost got it! 🤏",
-            "Nope! 🏃‍♂️",
-            "Gotta be quicker! ⚡",
-            "Are you even trying? 😜",
-            "Catch me if you can! 🤪",
-            "Not happening! 🙅‍♂️",
-            "Getting tired yet? 🥵",
-            "Just a few more times... 😉"
+        // 1. YOUR PHOTOS (Add your links here)
+        const slides = [
+            { img: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1887", text: "Remember when we first met? ❤️" },
+            { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1887", text: "Every moment with you is magic ✨" },
+            { img: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1887", text: "I'm so lucky to have you 🥰" }
         ];
 
+        // 2. MUSIC LINK (Optional)
+        // If you have a direct MP3 link, put it in the <audio> tag above.
+        
+        // --- LOGIC ---
+        
+        let currentSlide = 0;
         let attempts = 0;
-        const requiredAttempts = 15; // EXACTLY 15 interactions required
-        const subtext = document.getElementById('subtext');
+        
+        // Music Start (Must happen on interaction)
+        function startJourney() {
+            document.getElementById('bg-music').play().catch(e => console.log("Audio failed to play (browser blocked)"));
+            switchScreen(1, 2);
+        }
 
-        function interact(btn) {
-            // 1. CHECK IF WE HIT THE LIMIT
-            if (attempts >= requiredAttempts) {
-                // VICTORY MODE: Allow the click to go through
-                handleWin();
-                return;
+        function switchScreen(from, to) {
+            document.getElementById(`screen${from}`).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(`screen${to}`).classList.add('active');
+            }, 500); // Wait for fade out
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            if (currentSlide < slides.length) {
+                // Update Image & Text with fade effect
+                const img = document.getElementById('slide-img');
+                const txt = document.getElementById('slide-caption');
+                
+                img.style.opacity = 0;
+                setTimeout(() => {
+                    img.src = slides[currentSlide].img;
+                    txt.innerText = slides[currentSlide].text;
+                    img.style.opacity = 1;
+                }, 300);
+            } else {
+                // End of slideshow, go to Ask
+                switchScreen(2, 3);
             }
+        }
 
-            // 2. MOVEMENT LOGIC (If under 15 tries)
-            // Calculate Safe Boundaries (Screen size minus button size minus 50px buffer)
-            const safeX = window.innerWidth - btn.offsetWidth - 50;
-            const safeY = window.innerHeight - btn.offsetHeight - 50;
-
-            // Generate random position within safe boundaries
-            // Math.max(20, ...) ensures it doesn't stick to the top/left edge
-            const newX = Math.max(20, Math.random() * safeX);
-            const newY = Math.max(20, Math.random() * safeY);
+        function dodge(btn) {
+            const taunts = ["Missed me! 😜", "Too slow! 🐢", "Try again! 💫", "Nice try! 😂", "Nope! 🙅‍♂️"];
+            const tauntDiv = document.getElementById('taunt');
             
-            // Apply new position
-            btn.style.position = 'fixed'; // Breaks it out of the layout
-            btn.style.left = newX + 'px';
-            btn.style.top = newY + 'px';
-
-            // 3. UPDATE TEXT & COUNTER
-            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-            subtext.innerText = randomMsg;
-            subtext.style.color = "#ff4d6d";
-            subtext.style.fontWeight = "bold";
-
+            // Move Logic
+            const x = Math.max(20, Math.random() * (window.innerWidth - 100));
+            const y = Math.max(20, Math.random() * (window.innerHeight - 60));
+            
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            
+            tauntDiv.innerText = taunts[Math.floor(Math.random() * taunts.length)];
             attempts++;
-            
-            // Optional: Hint when they are close
-            if (attempts === requiredAttempts - 1) {
-                subtext.innerText = "Okay, okay... one last try! ❤️";
+
+            if (attempts >= 15) {
+                // Victory Condition
+                btn.innerText = "YES";
+                btn.onclick = goToTicket;
+                btn.onmouseover = null;
+                tauntDiv.innerText = "Okay, I give up! Click it! ❤️";
             }
         }
 
-        function handleWin() {
-            // Prevent multiple triggers
-            const btnContainer = document.getElementById('buttons');
-            if (btnContainer.style.display === 'none') return;
-
-            // 1. Confetti Explosion
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+        function goToTicket() {
+            // Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
             
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
-            }, 250);
-
-            // 2. Update Content
-            document.getElementById('question').innerText = "Knew you couldn't resist.";
-            document.getElementById('subtext').innerText = "See you tomorrow! ❤️";
-            document.getElementById('subtext').style.color = "#555"; // Reset color
-            
-            // 3. Hide Buttons & Icon
-            btnContainer.style.display = 'none';
-            document.getElementById('icon').style.display = 'none';
-
-            // 4. Show Photo
-            const img = document.getElementById('final-photo');
-            img.src = yourPhotoURL;
-            img.style.display = 'inline-block';
+            // Show Ticket
+            switchScreen(3, 4);
         }
+
     </script>
 </body>
 </html>
