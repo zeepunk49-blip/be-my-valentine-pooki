@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You ❤️</title>
+    <title>For My Pookie ❤️</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* Modern CSS Reset & Variables */
         :root {
             --primary: #ff4d6d;
-            --secondary: #ff8fa3;
             --bg-color: #ffe5ec;
-            --glass: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass: rgba(255, 255, 255, 0.8);
         }
 
         body {
             margin: 0;
-            padding: 0;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Animated Gradient Background */
             background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a18cd1);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -42,29 +35,24 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Card */
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px); /* Safari support */
-            border: 1px solid var(--glass-border);
             padding: 3rem;
             border-radius: 24px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             text-align: center;
             max-width: 90%;
             width: 400px;
-            transition: transform 0.3s ease;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
             color: #d62828;
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin: 0;
             line-height: 1.2;
         }
@@ -73,7 +61,8 @@
             color: #555;
             font-size: 1.1rem;
             margin-top: 1rem;
-            min-height: 3rem; /* Prevents jumping when text changes */
+            min-height: 2rem;
+            transition: opacity 0.3s;
         }
 
         .btn-group {
@@ -81,8 +70,7 @@
             display: flex;
             justify-content: center;
             gap: 1.5rem;
-            position: relative;
-            height: 60px; /* Layout stability */
+            height: 60px; /* Keeps layout stable */
         }
 
         button {
@@ -93,117 +81,98 @@
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .btn-yes {
             background: var(--primary);
             color: white;
-        }
-        
-        .btn-yes:hover {
-            background: #e01e37;
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(224, 30, 55, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            transition: transform 0.2s;
         }
 
-        .btn-no {
-            background: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
+        /* The Photo Styling */
+        .user-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Makes it a circle */
+            object-fit: cover;
+            border: 5px solid #ff4d6d;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none; /* Hidden at start */
         }
 
-        /* Hidden class for states */
-        .hidden { display: none; }
-        
-        /* Floating hearts background animation */
-        .floating-heart {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.6);
-            animation: float 6s linear infinite;
-            z-index: -1;
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
     </style>
 </head>
 <body>
 
-    <div id="background-hearts"></div>
-
     <div class="glass-card" id="main-card">
-        <div style="font-size: 4rem; margin-bottom: 1rem;">💌</div>
-        <h1 id="question">Will you be my Valentine?</h1>
-        <p id="subtext">I have a very important question...</p>
+        <img id="final-photo" class="user-photo" src="" alt="My Photo">
         
-        <div class="btn-group">
-            <button class="btn-yes" onclick="handleYes()">YES</button>
-            <button class="btn-no" id="noBtn" onmouseover="dodge(this)" onclick="dodge(this)">NO</button>
+        <div id="icon" style="font-size: 4rem; margin-bottom: 1rem;">💌</div>
+        
+        <h1 id="question">Dearest Pookie, <br>will you be my Valentine?</h1>
+        <p id="subtext">Don't say no! (Actually, you can't) 😉</p>
+        
+        <div class="btn-group" id="buttons">
+            <button id="btn1" onmouseover="dodge(this)" onclick="dodge(this)">YES</button>
+            <button id="btn2" onmouseover="dodge(this)" onclick="dodge(this)">YES</button>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
+        // --- 1. INSERT YOUR PHOTO LINK HERE ---
+        // Paste your image link inside the quotes below. 
+        // Example: "https://github.com/yourname/repo/blob/main/photo.jpg?raw=true"
+        const yourPhotoURL = "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1887&auto=format&fit=crop"; 
+
+        // --- CHEEKY MESSAGES ---
         const messages = [
-            "Nice try! 😉",
             "Too slow! 💨",
-            "Almost got it! 😂",
-            "Nope, over here! 👉",
-            "You really want to click No? 🥺",
-            "Catch me if you can! 🏃‍♀️",
-            "Not happening! 🙅‍♂️",
-            "Seriously? 🧐",
-            "Okay, I'm getting dizzy 😵",
-            "Just click YES already! ❤️"
+            "Not that one either! 😂",
+            "Try the other Yes! 👉",
+            "Oops, slippery fingers? 🧈",
+            "You really want this huh? 😏",
+            "Almost got it! 🤏",
+            "Nope! 🏃‍♂️",
+            "Gotta be quicker than that! ⚡",
+            "Are you even trying? 😜",
+            "Okay, I'm getting tired... 🥵"
         ];
-        
+
         let attempts = 0;
         const maxAttempts = 15;
-        const noBtn = document.getElementById('noBtn');
         const subtext = document.getElementById('subtext');
 
-        // --- BACKGROUND HEARTS ---
-        function createFloatingHearts() {
-            const container = document.getElementById('background-hearts');
-            for(let i=0; i<15; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('floating-heart');
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                heart.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(heart);
-            }
-        }
-        createFloatingHearts();
-
-        // --- THE CHASE LOGIC ---
         function dodge(btn) {
+            // IF WE REACH 15 TRIES, STOP MOVING AND LET HER CLICK
             if (attempts >= maxAttempts) {
-                // SURRENDER MODE: Button turns into YES
-                btn.innerText = "YES";
-                btn.className = "btn-yes"; // Switch styling to the pink button
-                btn.onmouseover = null; // Stop moving
-                btn.onclick = handleYes; // Make it trigger the win
-                subtext.innerText = "Okay, I surrender! The button is yours. ❤️";
+                // Change text to surrender
+                subtext.innerText = "Okay okay, I surrender! click it! ❤️";
+                
+                // Reset buttons to normal state so they can be clicked
+                document.getElementById('btn1').onmouseover = null;
+                document.getElementById('btn2').onmouseover = null;
+                
+                // Set the click action to the Win function
+                document.getElementById('btn1').onclick = handleWin;
+                document.getElementById('btn2').onclick = handleWin;
                 return;
             }
 
-            // Calculate random position within the window
-            // We use fixed positioning to let it fly anywhere on screen
-            const x = Math.random() * (window.innerWidth - 150);
+            // --- MOVE LOGIC ---
+            // Move the button to a random spot on the screen
+            const x = Math.random() * (window.innerWidth - 100);
             const y = Math.random() * (window.innerHeight - 60);
             
-            btn.style.position = 'fixed';
+            btn.style.position = 'fixed'; // Allows it to fly anywhere
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
-            
-            // Update text with a random taunt
+
+            // Change the message
             const randomMsg = messages[Math.floor(Math.random() * messages.length)];
             subtext.innerText = randomMsg;
             subtext.style.color = "#ff4d6d";
@@ -212,37 +181,31 @@
             attempts++;
         }
 
-        // --- THE VICTORY STATE ---
-        function handleYes() {
+        function handleWin() {
             // 1. Trigger Confetti
             var duration = 3 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
+            
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
+                if (timeLeft <= 0) return clearInterval(interval);
                 var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: randomInRange(0.9, 1.0) } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: randomInRange(0.9, 1.0) } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
             }, 250);
 
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
-            }
-
             // 2. Update the Card Content
-            const card = document.getElementById('main-card');
-            card.innerHTML = `
-                <div style="font-size: 5rem; animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">💖</div>
-                <h1>She said YES!</h1>
-                <p>Best. Valentine. Ever.</p>
-                <p style="font-size: 0.9rem; color: #888;">(I'll pick you up at 7 PM)</p>
-            `;
+            document.getElementById('question').innerText = "Knew you couldn't resist.";
+            document.getElementById('subtext').innerText = "See you tomorrow! ❤️";
+            
+            // Hide buttons and icon
+            document.getElementById('buttons').style.display = 'none';
+            document.getElementById('icon').style.display = 'none';
+
+            // Show Your Photo
+            const img = document.getElementById('final-photo');
+            img.src = yourPhotoURL; // Sets the source to your link
+            img.style.display = 'inline-block'; // Makes it visible
         }
     </script>
 </body>
