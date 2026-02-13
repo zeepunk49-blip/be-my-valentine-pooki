@@ -3,136 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wait... I have a question!</title>
+    <title>For You ❤️</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
+        /* Modern CSS Reset & Variables */
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --bg-color: #ffe5ec;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+        }
+
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
-            background: #ffe5ec;
-            font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            transition: background 0.5s;
         }
 
-        #container {
-            background: white;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* Safari support */
+            border: 1px solid var(--glass-border);
             padding: 3rem;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             text-align: center;
-            z-index: 10;
-            max-width: 80%;
+            max-width: 90%;
+            width: 400px;
+            transition: transform 0.3s ease;
         }
 
-        h1 { color: #ff0a54; font-size: 2rem; }
-        p { color: #4a4e69; font-size: 1.1rem; }
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
 
-        .btn-container {
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #d62828;
+            font-size: 3rem;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        p {
+            color: #555;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            min-height: 3rem; /* Prevents jumping when text changes */
+        }
+
+        .btn-group {
             margin-top: 2rem;
             display: flex;
             justify-content: center;
-            gap: 15px;
-            height: 60px;
+            gap: 1.5rem;
+            position: relative;
+            height: 60px; /* Layout stability */
         }
 
-        .yes-button {
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            background-color: #ff4d6d;
-            color: white;
+        button {
+            padding: 12px 32px;
             border: none;
             border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
-            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* Heart Animation Styling */
-        .heart {
+        .btn-yes {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-yes:hover {
+            background: #e01e37;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(224, 30, 55, 0.3);
+        }
+
+        .btn-no {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        /* Hidden class for states */
+        .hidden { display: none; }
+        
+        /* Floating hearts background animation */
+        .floating-heart {
             position: absolute;
-            color: #ff4d6d;
-            font-size: 20px;
-            top: -20px;
-            user-select: none;
-            z-index: 1;
-            animation: fall linear forwards;
+            color: rgba(255, 255, 255, 0.6);
+            animation: float 6s linear infinite;
+            z-index: -1;
         }
 
-        @keyframes fall {
-            to {
-                transform: translateY(105vh) rotate(360deg);
-            }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div id="container">
-        <div id="icon" style="font-size: 4rem;">💌</div>
-        <h1 id="heading">Will you be my Valentine?</h1>
-        <p id="text">I've been wanting to ask you this...</p>
+    <div id="background-hearts"></div>
+
+    <div class="glass-card" id="main-card">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">💌</div>
+        <h1 id="question">Will you be my Valentine?</h1>
+        <p id="subtext">I have a very important question...</p>
         
-        <div class="btn-container" id="buttonArea">
-            <button class="yes-button" id="btn1" onmouseover="moveMe(this)" onclick="celebrate()">Yes!</button>
-            <button class="yes-button" id="btn2" onmouseover="moveMe(this)" onclick="celebrate()">Yes!</button>
+        <div class="btn-group">
+            <button class="btn-yes" onclick="handleYes()">YES</button>
+            <button class="btn-no" id="noBtn" onmouseover="dodge(this)" onclick="dodge(this)">NO</button>
         </div>
     </div>
 
     <script>
-        let moveCount = 0;
-        const limit = 15;
+        // --- CONFIGURATION ---
+        const messages = [
+            "Nice try! 😉",
+            "Too slow! 💨",
+            "Almost got it! 😂",
+            "Nope, over here! 👉",
+            "You really want to click No? 🥺",
+            "Catch me if you can! 🏃‍♀️",
+            "Not happening! 🙅‍♂️",
+            "Seriously? 🧐",
+            "Okay, I'm getting dizzy 😵",
+            "Just click YES already! ❤️"
+        ];
+        
+        let attempts = 0;
+        const maxAttempts = 15;
+        const noBtn = document.getElementById('noBtn');
+        const subtext = document.getElementById('subtext');
 
-        function moveMe(btn) {
-            if (moveCount < limit) {
-                const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-                const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-                
-                btn.style.position = 'fixed';
-                btn.style.left = x + 'px';
-                btn.style.top = y + 'px';
-                
-                moveCount++;
-                
-                if (moveCount === 1) {
-                    document.getElementById('text').innerText = "Wait! Come back!";
-                }
-                if (moveCount === 8) {
-                    document.getElementById('text').innerText = "You're almost there! 😂";
-                }
-                if (moveCount === limit) {
-                    document.getElementById('text').innerText = "Okay, I'll stop! I promise. ❤️";
-                }
+        // --- BACKGROUND HEARTS ---
+        function createFloatingHearts() {
+            const container = document.getElementById('background-hearts');
+            for(let i=0; i<15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(heart);
             }
         }
+        createFloatingHearts();
 
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerText = '❤️';
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
-            document.body.appendChild(heart);
+        // --- THE CHASE LOGIC ---
+        function dodge(btn) {
+            if (attempts >= maxAttempts) {
+                // SURRENDER MODE: Button turns into YES
+                btn.innerText = "YES";
+                btn.className = "btn-yes"; // Switch styling to the pink button
+                btn.onmouseover = null; // Stop moving
+                btn.onclick = handleYes; // Make it trigger the win
+                subtext.innerText = "Okay, I surrender! The button is yours. ❤️";
+                return;
+            }
+
+            // Calculate random position within the window
+            // We use fixed positioning to let it fly anywhere on screen
+            const x = Math.random() * (window.innerWidth - 150);
+            const y = Math.random() * (window.innerHeight - 60);
             
-            setTimeout(() => { heart.remove(); }, 5000);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            
+            // Update text with a random taunt
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            subtext.innerText = randomMsg;
+            subtext.style.color = "#ff4d6d";
+            subtext.style.fontWeight = "bold";
+
+            attempts++;
         }
 
-        function celebrate() {
-            if (moveCount >= limit) {
-                // Change the card content
-                document.getElementById('icon').innerText = "💖";
-                document.getElementById('heading').innerText = "YAY! IT'S A DATE!";
-                document.getElementById('text').innerHTML = "I knew you couldn't resist. <br> See you tomorrow!";
-                document.getElementById('buttonArea').style.display = "none";
-                document.body.style.background = "#ffb3c1";
+        // --- THE VICTORY STATE ---
+        function handleYes() {
+            // 1. Trigger Confetti
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-                // Start the heart shower
-                setInterval(createHeart, 150);
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: randomInRange(0.9, 1.0) } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: randomInRange(0.9, 1.0) } }));
+            }, 250);
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
             }
+
+            // 2. Update the Card Content
+            const card = document.getElementById('main-card');
+            card.innerHTML = `
+                <div style="font-size: 5rem; animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">💖</div>
+                <h1>She said YES!</h1>
+                <p>Best. Valentine. Ever.</p>
+                <p style="font-size: 0.9rem; color: #888;">(I'll pick you up at 7 PM)</p>
+            `;
         }
     </script>
-
 </body>
 </html>
