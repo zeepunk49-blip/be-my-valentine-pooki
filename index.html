@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Have a Question...</title>
+    <title>Wait... I have a question!</title>
     <style>
         body {
             display: flex;
@@ -11,9 +11,10 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: #ffafcc; /* Soft Pink Background */
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            overflow: hidden; /* Prevents scrollbars when buttons jump */
+            background: #ffe5ec;
+            font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
+            overflow: hidden;
+            transition: background 0.5s;
         }
 
         #container {
@@ -22,84 +23,113 @@
             border-radius: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
-            z-index: 1;
+            z-index: 10;
+            max-width: 80%;
         }
 
-        h1 { color: #ff0a54; font-size: 2.5rem; }
-        p { color: #800f2f; font-size: 1.2rem; }
+        h1 { color: #ff0a54; font-size: 2rem; }
+        p { color: #4a4e69; font-size: 1.1rem; }
 
         .btn-container {
             margin-top: 2rem;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            height: 60px;
         }
 
         .yes-button {
-            padding: 15px 40px;
-            font-size: 1.5rem;
+            padding: 15px 35px;
+            font-size: 1.2rem;
             background-color: #ff4d6d;
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.1s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+            font-weight: bold;
         }
 
-        .counter-text {
-            margin-top: 15px;
-            font-size: 0.8rem;
-            color: #ff85a1;
+        /* Heart Animation Styling */
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 20px;
+            top: -20px;
+            user-select: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
 
     <div id="container">
-        <div style="font-size: 4rem;">💝</div>
-        <h1>Will you be my Valentine?</h1>
-        <p>Pick an option below (if you can!)</p>
+        <div id="icon" style="font-size: 4rem;">💌</div>
+        <h1 id="heading">Will you be my Valentine?</h1>
+        <p id="text">I've been wanting to ask you this...</p>
         
-        <div class="btn-container">
-            <button class="yes-button" id="btn1" onmouseover="moveMe(this)" onclick="checkWin()">Yes!</button>
-            <button class="yes-button" id="btn2" onmouseover="moveMe(this)" onclick="checkWin()">Yes!</button>
+        <div class="btn-container" id="buttonArea">
+            <button class="yes-button" id="btn1" onmouseover="moveMe(this)" onclick="celebrate()">Yes!</button>
+            <button class="yes-button" id="btn2" onmouseover="moveMe(this)" onclick="celebrate()">Yes!</button>
         </div>
-        <div class="counter-text" id="status">Attempts: 0/15</div>
     </div>
 
     <script>
         let moveCount = 0;
-        const limit = 15; // Number of times they have to chase it
+        const limit = 15;
 
         function moveMe(btn) {
             if (moveCount < limit) {
-                // Generate random coordinates
                 const x = Math.random() * (window.innerWidth - btn.offsetWidth);
                 const y = Math.random() * (window.innerHeight - btn.offsetHeight);
                 
-                // Move the button
                 btn.style.position = 'fixed';
                 btn.style.left = x + 'px';
                 btn.style.top = y + 'px';
                 
                 moveCount++;
-                document.getElementById('status').innerText = `Attempts: ${moveCount}/${limit}`;
                 
+                if (moveCount === 1) {
+                    document.getElementById('text').innerText = "Wait! Come back!";
+                }
+                if (moveCount === 8) {
+                    document.getElementById('text').innerText = "You're almost there! 😂";
+                }
                 if (moveCount === limit) {
-                    document.getElementById('status').innerText = "Okay, okay! You caught me! ❤️";
-                    document.getElementById('status').style.color = "#ff0a54";
+                    document.getElementById('text').innerText = "Okay, I'll stop! I promise. ❤️";
                 }
             }
         }
 
-        function checkWin() {
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = '❤️';
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(heart);
+            
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+
+        function celebrate() {
             if (moveCount >= limit) {
-                document.getElementById('container').innerHTML = `
-                    <div style="font-size: 5rem;">🎉</div>
-                    <h1>YAY! IT'S A DATE!</h1>
-                    <p>I knew you'd eventually say yes. <br> See you tomorrow!</p>
-                `;
+                // Change the card content
+                document.getElementById('icon').innerText = "💖";
+                document.getElementById('heading').innerText = "YAY! IT'S A DATE!";
+                document.getElementById('text').innerHTML = "I knew you couldn't resist. <br> See you tomorrow!";
+                document.getElementById('buttonArea').style.display = "none";
+                document.body.style.background = "#ffb3c1";
+
+                // Start the heart shower
+                setInterval(createHeart, 150);
             }
         }
     </script>
