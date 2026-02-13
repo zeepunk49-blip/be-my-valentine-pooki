@@ -3,101 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Question</title>
+    <title>I Have a Question...</title>
     <style>
         body {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            /* CUSTOM BACKGROUND: Change the URL below to any image link or use a color */
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                        url('https://images.unsplash.com/photo-1518199266791-73994940132d?q=80&w=2070&auto=format&fit=crop'); 
-            background-size: cover;
-            background-position: center;
-            font-family: 'Georgia', serif;
-            text-align: center;
+            background: #ffafcc; /* Soft Pink Background */
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden; /* Prevents scrollbars when buttons jump */
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+        #container {
+            background: white;
             padding: 3rem;
             border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            z-index: 1;
         }
 
-        h1 { color: #c9184a; font-size: 2.2rem; margin-bottom: 10px; }
-        p { color: #555; font-size: 1.1rem; }
+        h1 { color: #ff0a54; font-size: 2.5rem; }
+        p { color: #800f2f; font-size: 1.2rem; }
 
-        .buttons {
-            margin-top: 2.5rem;
+        .btn-container {
+            margin-top: 2rem;
             display: flex;
             justify-content: center;
             gap: 20px;
-            min-height: 50px; /* Keeps layout stable when "No" vanishes */
         }
 
-        button {
-            padding: 12px 35px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        #yesBtn {
+        .yes-button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
             background-color: #ff4d6d;
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        #yesBtn:hover { transform: scale(1.1); background-color: #ff758f; }
-
-        #noBtn {
-            background-color: #6c757d;
-            color: white;
-            opacity: 1;
+        .counter-text {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #ff85a1;
         }
-
-        .heart-icon { font-size: 4rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainCard">
-        <div class="heart-icon">🌹</div>
+    <div id="container">
+        <div style="font-size: 4rem;">💝</div>
         <h1>Will you be my Valentine?</h1>
-        <p>I promise it'll be a day full of surprises!</p>
+        <p>Pick an option below (if you can!)</p>
         
-        <div class="buttons">
-            <button id="yesBtn" onclick="celebrate()">Yes!</button>
-            <button id="noBtn" onmouseover="vanishButton()">No</button>
+        <div class="btn-container">
+            <button class="yes-button" id="btn1" onmouseover="moveMe(this)" onclick="checkWin()">Yes!</button>
+            <button class="yes-button" id="btn2" onmouseover="moveMe(this)" onclick="checkWin()">Yes!</button>
         </div>
+        <div class="counter-text" id="status">Attempts: 0/15</div>
     </div>
 
     <script>
-        function vanishButton() {
-            const noBtn = document.getElementById('noBtn');
-            // This makes it invisible and unclickable instantly
-            noBtn.style.display = 'none'; 
+        let moveCount = 0;
+        const limit = 15; // Number of times they have to chase it
+
+        function moveMe(btn) {
+            if (moveCount < limit) {
+                // Generate random coordinates
+                const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+                
+                // Move the button
+                btn.style.position = 'fixed';
+                btn.style.left = x + 'px';
+                btn.style.top = y + 'px';
+                
+                moveCount++;
+                document.getElementById('status').innerText = `Attempts: ${moveCount}/${limit}`;
+                
+                if (moveCount === limit) {
+                    document.getElementById('status').innerText = "Okay, okay! You caught me! ❤️";
+                    document.getElementById('status').style.color = "#ff0a54";
+                }
+            }
         }
 
-        function celebrate() {
-            const card = document.getElementById('mainCard');
-            card.innerHTML = `
-                <div class="heart-icon">💖</div>
-                <h1>I knew you'd say yes!</h1>
-                <p>Can't wait to see you tomorrow. I love you!</p>
-            `;
-            // Optional: add some confetti or a bigger heart
-            card.style.borderColor = "#ff4d6d";
-            card.style.borderWidth = "2px";
-            card.style.borderStyle = "solid";
+        function checkWin() {
+            if (moveCount >= limit) {
+                document.getElementById('container').innerHTML = `
+                    <div style="font-size: 5rem;">🎉</div>
+                    <h1>YAY! IT'S A DATE!</h1>
+                    <p>I knew you'd eventually say yes. <br> See you tomorrow!</p>
+                `;
+            }
         }
     </script>
 
