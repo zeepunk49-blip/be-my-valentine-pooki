@@ -3,54 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Make a Wish ❤️</title>
+    <title>A Light for You ❤️</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         body {
             margin: 0;
             height: 100vh;
-            background-color: #1a1a2e; /* Dark night/stage background */
+            background-color: #1a1a2e; /* Dark background for contrast */
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
             flex-direction: column;
+            color: white;
         }
 
         #stage-container {
             position: relative;
-            width: 100%;
-            max-width: 500px; /* Fits phone screens well */
-            height: 80vh;
+            width: 90%;
+            max-width: 600px;
+            aspect-ratio: 16/9; /* Maintain a good aspect ratio for the images */
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 223, 186, 0.3);
+            overflow: hidden;
+            background: #000;
         }
 
         /* The Main Image Display */
         .scene-img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: auto;
-            max-height: 100%;
-            object-fit: contain;
-            transition: opacity 0.5s;
-            display: none; /* Hidden by default */
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 223, 186, 0.2);
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out; /* Smooth transition between images */
         }
 
         .active {
-            display: block;
-            animation: fadeIn 0.5s;
+            opacity: 1;
+            z-index: 1;
         }
 
         /* Interaction Button */
         #action-btn {
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 15px 40px;
             font-size: 1.2rem;
             background: #ff4d6d;
@@ -59,8 +65,9 @@
             border-radius: 50px;
             cursor: pointer;
             font-family: 'Dancing Script', cursive;
-            box-shadow: 0 0 15px #ff4d6d;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.5);
             animation: pulse 2s infinite;
+            z-index: 10;
         }
 
         /* The Final Question Overlay */
@@ -69,100 +76,119 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2rem;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 25px;
             text-align: center;
-            width: 80%;
+            width: 85%;
+            max-width: 400px;
             display: none; /* Hidden until end */
             z-index: 100;
+            color: #333;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
         .yes-btn {
             background: #ff4d6d;
             color: white;
             border: none;
-            padding: 10px 30px;
-            border-radius: 20px;
-            font-size: 1rem;
+            padding: 12px 35px;
+            border-radius: 25px;
+            font-size: 1.1rem;
             margin: 10px;
             cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .yes-btn:hover {
+            transform: scale(1.05);
         }
 
-        /* Microphone/Blow Indicator */
-        .mic-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div id="stage-container">
-        <img id="img1" class="scene-img active" src="blow.png" alt="Blow Candle">
+        <img id="img1" class="scene-img active" src="image_7.png" alt="Blow Candle">
         
-        <img id="img2" class="scene-img" src="fall.png" alt="Candle Falls">
+        <img id="img2" class="scene-img" src="image_8.png" alt="Candle Falls">
         
-        <img id="img3" class="scene-img" src="path1.png" alt="Path Lights">
+        <img id="img3" class="scene-img" src="image_9.png" alt="Chain Reaction">
         
-        <img id="img4" class="scene-img" src="path2.png" alt="More Lights">
+        <img id="img4" class="scene-img" src="image_10.png" alt="Path Lights Up">
         
-        <img id="img5" class="scene-img" src="stage.png" alt="Stage Finale">
+        <img id="img5" class="scene-img" src="image_11.png" alt="Stage Finale">
 
         <div id="final-overlay">
-            <h1 style="color: #d62828; font-family: 'Dancing Script'; margin: 0;">Will you be my Valentine?</h1>
-            <p>You light up my world! ✨</p>
-            <button class="yes-btn" onclick="celebrate()">YES!</button>
-            <button class="yes-btn" onclick="celebrate()">YES!</button>
+            <h1 style="color: #d62828; font-family: 'Dancing Script'; margin: 0 0 10px 0; font-size: 2.5rem;">Will you be my Valentine?</h1>
+            <p style="font-size: 1.1rem;">You light up my life! ✨</p>
+            <div style="margin-top: 20px;">
+                <button class="yes-btn" onclick="celebrate()">YES!</button>
+                <button class="yes-btn" onclick="celebrate()">YES!</button>
+            </div>
         </div>
     </div>
 
-    <button id="action-btn" onclick="handleAction()">Tap to Blow Candle 🕯️</button>
+    <button id="action-btn" onclick="startSequence()">Tap to Make a Wish 🕯️</button>
 
     <script>
-        let step = 1;
+        let currentStep = 1;
+        const totalSteps = 5;
         const btn = document.getElementById('action-btn');
 
-        function handleAction() {
-            if (step === 1) {
-                // START THE SEQUENCE
-                btn.style.display = 'none'; // Hide button during animation
+        function startSequence() {
+            if (currentStep === 1) {
+                // Hide the button to prevent double clicks
+                btn.style.display = 'none';
                 
-                // Sequence Timing (Adjust numbers to make it faster/slower)
-                setTimeout(() => showImage(2), 1000); // Show falling candle after 1s
-                setTimeout(() => showImage(3), 2000); // Show path lighting up
-                setTimeout(() => showImage(4), 3000); // Show more lights
+                // Start the sequence of showing images
+                // The timings (in milliseconds) control how long each image is shown
+                setTimeout(() => showImage(2), 1200); // Show falling candle after 1.2s
+                setTimeout(() => showImage(3), 2400); // Show chain reaction
+                setTimeout(() => showImage(4), 3600); // Show path
                 setTimeout(() => {
                     showImage(5); // Show Final Stage
                     startFinale();
-                }, 4500);
+                }, 4800);
             }
         }
 
-        function showImage(num) {
-            // Hide all images
-            document.querySelectorAll('.scene-img').forEach(img => img.classList.remove('active'));
-            // Show the specific image
-            document.getElementById(`img${num}`).classList.add('active');
+        function showImage(stepNum) {
+            // Find the currently active image and remove the 'active' class
+            const activeImg = document.querySelector('.scene-img.active');
+            if (activeImg) {
+                activeImg.classList.remove('active');
+            }
+            
+            // Find the next image and add the 'active' class to show it
+            const nextImg = document.getElementById(`img${stepNum}`);
+            if (nextImg) {
+                nextImg.classList.add('active');
+                currentStep = stepNum;
+            }
         }
 
         function startFinale() {
-            // Show the question overlay on top of the stage image
+            // Show the question overlay after the final image is displayed
             setTimeout(() => {
                 document.getElementById('final-overlay').style.display = 'block';
-                // Trigger confetti for the "Happy Valentine's Day" stage reveal
+                // Trigger a small confetti burst
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
             }, 1000);
         }
 
         function celebrate() {
+            // Change the text in the overlay
             document.querySelector('#final-overlay h1').innerText = "YAY! ❤️";
-            document.querySelector('#final-overlay p').innerText = "See you tomorrow!";
+            document.querySelector('#final-overlay p').innerText = "Best Valentine's Day Ever!";
             
-            // Big Confetti Loop
+            // Remove the Yes buttons
+            const buttons = document.querySelectorAll('.yes-btn');
+            buttons.forEach(btn => btn.style.display = 'none');
+
+            // Start a big confetti loop for celebration
             var duration = 3 * 1000;
             var end = Date.now() + duration;
             (function frame() {
