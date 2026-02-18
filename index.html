@@ -6,25 +6,23 @@
     <title>Valentine's Invitation</title>
     <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
     <style>
-        /* CSS: The Styles */
         body {
             margin: 0;
             padding: 0;
-            background-color: #ffc0cb; /* The pink background */
+            background-color: #ffc0cb;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             font-family: 'Sacramento', cursive;
-            overflow: hidden; /* Prevents scrolling */
+            overflow: hidden;
         }
 
-        /* The white box container */
         .container {
-            background-color: rgba(255, 255, 255, 0.8); /* White with slight see-through */
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 20px;
-            border: 2px solid #ff69b4; /* Hot pink border */
+            border: 2px solid #ff69b4;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             max-width: 90%;
@@ -33,86 +31,59 @@
             z-index: 10;
         }
 
-        /* The Text */
         h1 {
-            font-size: 2.5rem;
-            color: #d32f2f; /* Dark red text */
-            margin: 20px 0;
+            font-size: 2.2rem;
+            color: #d32f2f;
+            margin: 15px 0;
         }
 
-        /* The Images (Gifs) */
         .gif-container img {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
+            width: 100%;
+            max-width: 250px;
+            height: auto;
             border-radius: 10px;
         }
 
-        /* The Buttons */
         .btn-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
         }
 
         button {
-            padding: 10px 30px;
-            font-size: 1.5rem;
+            padding: 10px 25px;
+            font-size: 1.2rem;
             font-family: 'Sacramento', cursive;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s;
-            color: black;
+            transition: all 0.2s ease;
+            color: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        #yes-btn {
-            background-color: #ff4d6d; /* Darker Pink */
-        }
-        
-        #no-btn {
-            background-color: #ff4d6d;
-        }
+        #yes-btn { background-color: #4CAF50; } /* Green for Yes */
+        #no-btn { background-color: #f44336; }  /* Red for No */
 
-        button:hover {
-            transform: scale(1.1);
-        }
+        button:hover { transform: scale(1.1); }
 
-        /* Message Me Button (Hidden initially) */
         #msg-btn {
             background-color: #ff4d6d;
-            display: none; /* Hidden by default */
+            display: none;
             margin: 0 auto;
-        }
-
-        /* Floating Hearts Animation Background */
-        .heart-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            display: none; /* Hidden until YES is clicked */
-            background-image: url('https://media.tenor.com/On7kvXhzml4AAAAj/love-heart.gif');
-            background-size: cover;
-            opacity: 0.5;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-    <div class="heart-bg" id="heart-bg"></div>
-
     <div class="container">
         <div class="gif-container">
-            <img id="main-image" src="https://media.tenor.com/I7kd0jQkXUAAAAAi/peach-goma-love.gif" alt="Cute Cat">
+            <img id="main-image" src="https://raw.githubusercontent.com/DzarelDeveloper/Img/main/goma/ask.gif" alt="Cute Cat">
         </div>
 
-        <h1 id="main-text">will you be Sarah's valentine? 🌹</h1>
+        <h1 id="main-text">Will you be my Valentine? 🌹</h1>
 
         <div class="btn-group">
             <button id="yes-btn" onclick="handleYes()">Yes</button>
@@ -122,16 +93,12 @@
     </div>
 
     <script>
-        // JAVASCRIPT: The Logic
-        
         const mainText = document.getElementById('main-text');
         const mainImage = document.getElementById('main-image');
         const yesBtn = document.getElementById('yes-btn');
         const noBtn = document.getElementById('no-btn');
         const msgBtn = document.getElementById('msg-btn');
-        const heartBg = document.getElementById('heart-bg');
 
-        // Track how many times they clicked "No"
         let clickCount = 0;
 
         // "No" Button Logic
@@ -139,52 +106,36 @@
             clickCount++;
             
             if (clickCount === 1) {
-                // Scene: Shocked / Food
-                mainImage.src = "https://media.tenor.com/ivKWdfdbV3EAAAAi/goma-peach.gif"; 
+                mainImage.src = "https://raw.githubusercontent.com/DzarelDeveloper/Img/main/goma/shocked.gif"; 
                 mainText.innerText = "You meant to press YES right?";
             } 
             else if (clickCount === 2) {
-                // Scene: Running away
-                mainImage.src = "https://media.tenor.com/0f8Zl_k82OAAAAAi/peach-goma.gif";
-                mainText.innerText = "Your hand must have slipped right?";
+                mainImage.src = "https://raw.githubusercontent.com/DzarelDeveloper/Img/main/goma/think.gif";
+                mainText.innerText = "Think about it again!";
             } 
             else if (clickCount === 3) {
-                // Scene: Crying
-                mainImage.src = "https://media.tenor.com/f1xnRxTRxLAAAAAi/peach-goma-cat.gif";
-                mainText.innerText = "I'm gonna cry 😭";
+                mainImage.src = "https://raw.githubusercontent.com/DzarelDeveloper/Img/main/goma/cry.gif";
+                mainText.innerText = "I'm gonna cry... 😭";
             } 
             else if (clickCount >= 4) {
-                // Scene: Pleading
-                mainImage.src = "https://media.tenor.com/420uI8yA1wUAAAAi/peach-goma.gif";
-                mainText.innerText = "Pretty Please 🥺";
-                // Reset count so it loops if they keep clicking
-                clickCount = 0; 
+                mainImage.src = "https://raw.githubusercontent.com/DzarelDeveloper/Img/main/goma/pleading.gif";
+                mainText.innerText = "Pretty Please? 🥺";
+                clickCount = 0; // Reset loop
             }
         }
 
         // "Yes" Button Logic
         function handleYes() {
-            // 1. Change Text
-            mainText.innerText = "Knew it babe 😘";
-            
-            // 2. Change Image to Hugging
-            mainImage.src = "https://media.tenor.com/J7eSZeclYqAAAAAi/peach-goma.gif";
-            
-            // 3. Hide Yes/No buttons
+            mainText.innerText = "Yay! I knew it! ❤️";
+            mainImage.src = "https://raw.githubusercontent.com/DzarelDeveloper/Img/main/goma/love.gif"; // Hugging gif
             yesBtn.style.display = 'none';
             noBtn.style.display = 'none';
-            
-            // 4. Show "Message Me" button
             msgBtn.style.display = 'block';
-
-            // 5. Turn on the background hearts
-            heartBg.style.display = 'block';
         }
 
-        // "Message Me" Button Logic
         function handleMessage() {
-            // CHANGE THIS LINK TO YOUR INSTAGRAM/WHATSAPP
-            window.location.href = "https://instagram.com/yourusername";
+            // REPLACE THIS LINK with your Instagram or WhatsApp
+            window.location.href = "https://instagram.com/your_username";
         }
     </script>
 </body>
