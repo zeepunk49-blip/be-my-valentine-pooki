@@ -4,24 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Dancing+Script:wght@700&family=Montserrat:wght@500;600&display=swap" rel="stylesheet">
     <style>
         /* --- GLOBAL SETUP --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            background-color: #050505; /* Start Black */
+            background-color: #030303; 
             overflow-x: hidden;
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Montserrat', sans-serif; 
         }
 
-        /* This creates the scroll timeline */
         .scroll-container {
-            height: 350vh; /* Determines how long the "video" lasts */
+            height: 400vh; /* Smooth, long scroll timeline */
             position: relative;
         }
 
-        /* --- SCENE 1: THE NETFLIX INTRO --- */
         .scene {
             position: sticky;
             top: 0;
@@ -33,135 +31,208 @@
             overflow: hidden;
         }
 
+        /* --- SCENE 1: CINEMATIC INTRO --- */
         #scene-intro {
-            background-color: #050505;
+            background-color: #030303;
             z-index: 10;
-            color: white;
+        }
+
+        .intro-text-container {
+            text-align: center;
+            z-index: 2;
         }
 
         .intro-text {
-            font-size: 5rem;
-            text-align: center;
-            font-weight: 800;
-            opacity: 1;
-            letter-spacing: -2px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6rem;
+            font-style: italic;
+            /* Gradient breathing text */
+            background: linear-gradient(45deg, #ffffff, #ffb3c6, #ffffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientBreathe 4s ease infinite;
+            line-height: 1.1;
+            margin-bottom: 10px;
         }
+
         .sub-text {
             font-size: 1.2rem;
             color: #ff4d6d;
-            margin-top: 10px;
-            font-weight: 400;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             text-transform: uppercase;
+            font-weight: 500;
         }
 
-        /* --- SCENE 2: THE TRANSITION (PINK PORTAL) --- */
+        @keyframes gradientBreathe {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles for intro */
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(100vh) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            to { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+        }
+
+        /* --- SCENE 2: THE PORTAL --- */
         #scene-transition {
             background: transparent;
-            pointer-events: none; /* Let clicks pass through initially */
+            pointer-events: none;
             z-index: 20;
         }
 
-        /* The circle that expands to become the background */
         .pink-circle {
             width: 0px;
             height: 0px;
-            background-color: #ffc0cb; /* The Valentine Pink */
+            /* Premium gradient pink instead of flat pink */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             border-radius: 50%;
             position: absolute;
             z-index: 1;
+            box-shadow: 0 0 100px rgba(255, 154, 158, 0.5);
         }
 
-        /* --- SCENE 3: THE VALENTINE CARD --- */
+        /* --- SCENE 3: THE GLASS CARD --- */
         #scene-card {
-            background: transparent; /* Background provided by the pink circle */
+            background: transparent;
             z-index: 30;
-            opacity: 0; /* Hidden at start */
-            transform: translateY(50px);
-            transition: opacity 0.5s ease;
+            opacity: 0;
+            transform: translateY(80px); /* Starts lower */
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        /* --- THE CARD STYLES (From your previous request) --- */
-        .card-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            border: 3px solid #ff69b4;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            width: 400px;
+        .glass-card {
+            /* Glassmorphism Effect */
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.5);
+            
+            /* Increased Size */
+            width: 600px;
             max-width: 90%;
-            font-family: 'Sacramento', cursive;
+            padding: 50px 40px;
+            text-align: center;
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
-        .card-container h1 {
-            font-size: 2.5rem;
+        .glass-card h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
             color: #d32f2f;
-            margin: 15px 0;
+            margin: 25px 0;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+        }
+
+        .gif-area {
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .gif-area img {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border-radius: 10px;
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .btn-group {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 25px;
+            margin-top: 15px;
         }
 
         button {
-            padding: 10px 30px;
-            font-size: 1.5rem;
-            font-family: 'Sacramento', cursive;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
             border: none;
-            border-radius: 10px;
+            border-radius: 50px; /* Pill shaped buttons */
             cursor: pointer;
-            transition: transform 0.2s;
-            color: black;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        #yes-btn { background-color: #a8e6cf; }
-        #no-btn { background-color: #ff8b94; }
-        button:hover { transform: scale(1.1); }
+        #yes-btn {
+            background: linear-gradient(45deg, #ff4d6d, #ff758c);
+        }
+        #no-btn {
+            background: rgba(255, 255, 255, 0.5);
+            color: #555;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        
+        button:hover { 
+            transform: translateY(-5px) scale(1.05); 
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
 
         #msg-btn {
-            background-color: #ff4d6d;
-            color: white;
+            background: linear-gradient(45deg, #d32f2f, #ff4d6d);
             display: none;
             margin: 0 auto;
+            font-size: 1.3rem;
         }
 
-        /* Scroll Prompt */
+        /* SCROLL INDICATOR */
         .scroll-indicator {
             position: fixed;
-            bottom: 30px;
+            bottom: 40px;
             width: 100%;
             text-align: center;
-            color: white;
+            color: rgba(255,255,255,0.6);
             font-size: 0.8rem;
-            animation: bounce 2s infinite;
+            letter-spacing: 2px;
+            animation: pulse 2s infinite;
             z-index: 100;
             pointer-events: none;
         }
-        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(10px);} }
+        @keyframes pulse { 0%, 100% {opacity:0.3;} 50% {opacity:1;} }
+
+        /* CONFETTI (Generated by JS) */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            z-index: 1;
+        }
 
     </style>
 </head>
 <body>
 
-    <div class="scroll-indicator" id="scroll-hint">Scroll Down</div>
+    <div class="scroll-indicator" id="scroll-hint">SCROLL SLOWLY</div>
 
     <div class="scroll-container">
         
         <div class="scene" id="scene-intro">
-            <div>
-                <h1 class="intro-text">Hello<br>Sarah</h1> <p class="sub-text">I have a question...</p>
+            <div class="intro-text-container">
+                <h1 class="intro-text">Hello<br>Beautiful</h1>
+                <p class="sub-text">I have a question...</p>
             </div>
         </div>
 
@@ -170,12 +241,12 @@
         </div>
 
         <div class="scene" id="scene-card">
-            <div class="card-container">
+            <div class="glass-card" id="main-card">
                 <div class="gif-area">
                     <img id="main-image" src="https://media1.tenor.com/m/I7kd0jQkXUAAAAAC/peach-goma-love.gif" alt="cat">
                 </div>
                 
-                <h1 id="main-text">Will you be my Valentine? 🌹</h1>
+                <h1 id="main-text">Will you be my Valentine?</h1>
                 
                 <div class="btn-group">
                     <button id="yes-btn" onclick="handleYes()">Yes</button>
@@ -188,50 +259,61 @@
     </div>
 
     <script>
+        // --- CREATE STARDUST PARTICLES FOR INTRO ---
+        const introScene = document.getElementById('scene-intro');
+        for (let i = 0; i < 40; i++) {
+            let particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.width = Math.random() * 4 + 1 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.animationDuration = Math.random() * 5 + 5 + 's';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            introScene.appendChild(particle);
+        }
+
         // --- SCROLL ANIMATION LOGIC ---
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             const h = window.innerHeight;
             
-            // 1. INTRO ANIMATION (Fade out text)
-            const introText = document.querySelector('.intro-text');
-            const subText = document.querySelector('.sub-text');
+            // 1. INTRO Fade and scale
+            const textContainer = document.querySelector('.intro-text-container');
             const scrollHint = document.getElementById('scroll-hint');
 
-            let opacity = 1 - (scrollY / (h * 0.5));
-            let scale = 1 + (scrollY * 0.0005);
+            let opacity = 1 - (scrollY / (h * 0.6));
+            let scale = 1 + (scrollY * 0.001);
 
             if (opacity < 0) opacity = 0;
             
-            introText.style.opacity = opacity;
-            introText.style.transform = `scale(${scale})`;
-            subText.style.opacity = opacity;
+            textContainer.style.opacity = opacity;
+            textContainer.style.transform = `scale(${scale})`;
             
-            // Hide scroll hint once we start moving
             if (scrollY > 50) scrollHint.style.opacity = 0;
 
-            // 2. PINK CIRCLE EXPANSION
+            // 2. PINK CIRCLE Expansion
             const circle = document.querySelector('.pink-circle');
-            
-            // Start expanding after 1/2 screen scroll
-            let circleSize = (scrollY - (h * 0.4)) * 3.5; 
+            let circleSize = (scrollY - (h * 0.5)) * 3; 
             if (circleSize < 0) circleSize = 0;
             
             circle.style.width = `${circleSize}px`;
             circle.style.height = `${circleSize}px`;
 
-            // 3. REVEAL CARD
+            // 3. REVEAL GLASS CARD
             const cardScene = document.getElementById('scene-card');
             
-            // If the circle covers the screen (approx 2.2x height), show card
-            if (scrollY > h * 1.8) {
+            if (scrollY > h * 1.6) {
                 cardScene.style.opacity = 1;
-                cardScene.style.transform = `translateY(0px)`;
-                cardScene.style.pointerEvents = "auto"; // Enable clicking
+                // Parallax float up effect
+                let yOffset = 80 - ((scrollY - (h * 1.6)) * 0.1);
+                if (yOffset < 0) yOffset = 0;
+                
+                cardScene.style.transform = `translateY(${yOffset}px)`;
+                cardScene.style.pointerEvents = "auto"; 
             } else {
                 cardScene.style.opacity = 0;
-                cardScene.style.transform = `translateY(50px)`;
-                cardScene.style.pointerEvents = "none"; // Disable clicking so it doesn't block scroll
+                cardScene.style.transform = `translateY(80px)`;
+                cardScene.style.pointerEvents = "none"; 
             }
         });
 
@@ -241,8 +323,9 @@
         const yesBtn = document.getElementById('yes-btn');
         const noBtn = document.getElementById('no-btn');
         const msgBtn = document.getElementById('msg-btn');
+        const cardArea = document.getElementById('main-card');
 
-        // Reliable Tenor Links
+        // Tenor Links
         const images = {
             shocked: "https://media1.tenor.com/m/ivKWdfdbV3EAAAAC/goma-peach.gif",
             think: "https://media1.tenor.com/m/0f8Zl_k82OAAAAAC/peach-goma.gif",
@@ -260,10 +343,10 @@
                 mainText.innerText = "You meant to press YES right?";
             } else if (clickCount === 2) {
                 mainImage.src = images.think;
-                mainText.innerText = "Think again...";
+                mainText.innerText = "Are you absolutely sure?";
             } else if (clickCount === 3) {
                 mainImage.src = images.cry;
-                mainText.innerText = "I'm gonna cry... 😭";
+                mainText.innerText = "I'm actually gonna cry 😭";
             } else {
                 mainImage.src = images.plead;
                 mainText.innerText = "Pretty Please? 🥺";
@@ -272,17 +355,50 @@
         }
 
         function handleYes() {
-            mainText.innerText = "Knew it babe 😘";
+            mainText.innerText = "I knew it! ❤️";
             mainImage.src = images.love;
             yesBtn.style.display = 'none';
             noBtn.style.display = 'none';
             msgBtn.style.display = 'block';
+            
+            // Fire Confetti behind the glass
+            fireConfetti();
         }
 
         function handleMessage() {
-            // REPLACE THIS
-            window.location.href = "https://instagram.com/your_username";
+            // INSERT YOUR LINK HERE
+            window.location.href = "https://instagram.com/yourusername";
         }
+
+        // --- CUSTOM CONFETTI FUNCTION ---
+        function fireConfetti() {
+            const colors = ['#ff4d6d', '#ffffff', '#ffb3c6', '#d32f2f'];
+            for (let i = 0; i < 60; i++) {
+                let conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.top = '-20px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Randomize shape (some circles, some squares)
+                if (Math.random() > 0.5) conf.style.borderRadius = '50%';
+                
+                // Random fall animation
+                let duration = Math.random() * 3 + 2;
+                conf.style.animation = `fallDown ${duration}s linear forwards`;
+                
+                cardArea.appendChild(conf);
+            }
+        }
+
+        // Add confetti animation dynamically
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fallDown {
+                to { transform: translateY(600px) rotate(720deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
